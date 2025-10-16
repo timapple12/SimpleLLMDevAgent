@@ -1,0 +1,100 @@
+# === General ===
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.bak
+*.lock
+*.orig
+
+# === Environment & secrets ===
+.env
+.env.*
+!.env.example
+system.yml
+*.p12
+*.pem
+*.crt
+*.key
+
+# === LLM / AI related ===
+# Cache and downloaded models
+__pycache__/
+.cache/
+.llm_cache/
+.ai_cache/
+models/
+*.bin
+*.pt
+*.onnx
+*.safetensors
+*.ckpt
+*.model
+*.h5
+
+# Local vector databases or embeddings
+chroma/
+faiss_index/
+embeddings/
+*.db
+*.sqlite
+
+# Temporary notebooks or test data
+notebooks/
+*.ipynb_checkpoints
+test_data/
+debug/
+
+# === Node / Vue frontend ===
+node_modules/
+dist/
+build/
+coverage/
+.idea/
+.vscode/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+
+# === Java / Spring Boot backend ===
+target/
+out/
+build/
+!.mvn/wrapper/maven-wrapper.jar
+.mvn/
+logs/
+spring.log
+
+# === IntelliJ / VSCode / Eclipse ===
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.project
+.classpath
+.settings/
+
+# === Docker / Deployment ===
+docker-compose.override.yml
+docker-compose.local.yml
+*.pid
+*.seed
+*.bak
+*.tar
+*.zip
+
+# === OS generated ===
+ehthumbs.db
+Icon?
+__MACOSX/
+
+# === Test output ===
+test-output/
+reports/
+coverage/
