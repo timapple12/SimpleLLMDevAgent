@@ -1,6 +1,7 @@
+from __future__ import annotations
+
 from typing import List, Dict, Any
 import requests
-
 
 SYSTEM_PROMPT = (
     "You are a code editing agent. Produce a unified git diff (patch) that applies to the repository root. "
@@ -10,13 +11,13 @@ SYSTEM_PROMPT = (
 
 class LLMAgent:
     def __init__(
-        self,
-        provider: str,
-        model: str,
-        project_root: str,
-        openai_api_key: str | None = None,
-        openai_model: str | None = None,
-        ollama_host: str = "http://localhost:11434",
+            self,
+            provider: str,
+            model: str,
+            project_root: str,
+            openai_api_key: str | None = None,
+            openai_model: str | None = None,
+            ollama_host: str = "http://localhost:11434",
     ) -> None:
         self.provider = provider
         self.model = model
@@ -39,9 +40,9 @@ class LLMAgent:
             ctx_snippets.append(f"FILE: {path}\n" + snippet)
 
         user_prompt = (
-            "TASK:\n" + task.strip() + "\n\n" +
-            "Relevant code snippets (read-only):\n\n" + "\n\n".join(ctx_snippets) + "\n\n" +
-            "Respond with a single valid unified git diff."
+                "TASK:\n" + task.strip() + "\n\n" +
+                "Relevant code snippets (read-only):\n\n" + "\n\n".join(ctx_snippets) + "\n\n" +
+                "Respond with a single valid unified git diff."
         )
         return [
             {"role": "system", "content": SYSTEM_PROMPT},
@@ -64,12 +65,12 @@ class LLMAgent:
         ]
         r = requests.post(
             f"{self.ollama_host}/api/chat",
-            json={"model": self.model, "messages": ollama_msgs, "options": {"temperature": 0.2}},
+            json={"model": self.model, "messages": ollama_msgs, "options": {"temperature": 0.2}, "stream": False},
             timeout=600,
         )
         r.raise_for_status()
         data = r.json()
-       
+
         if "message" in data and "content" in data["message"]:
             return data["message"]["content"]
         if "response" in data:
@@ -81,5 +82,3 @@ class LLMAgent:
         if self.provider == "openai":
             return self._chat_openai(messages)
         return self._chat_ollama(messages)
-
-

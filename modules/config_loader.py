@@ -85,7 +85,7 @@ class ConfigLoader:
         )
         agent = AgentConfig(
             top_k=int((data.get("agent", {}) or {}).get("top_k", 8)),
-            output_patch_path=(data.get("agent", {}) or {}).get("output_patch_path", "generated.patch"),
+            output_patch_path=(data.get("agent", {}) or {}).get("output_patch_path", "generated"),
             dry_run=bool((data.get("agent", {}) or {}).get("dry_run", False)),
             task_source=(data.get("agent", {}) or {}).get("task_source", "manual"),
         )

@@ -19,16 +19,56 @@ Minimal, cost-efficient Dev Agent that can autonomously edit code in a project w
 
 ### Install
 ```bash
-pip install openai PyGithub chromadb pyyaml requests
+pip3 install openai==1.3.0 PyGithub chromadb pyyaml requests
+pip3 install pysqlite3-binary
 ```
 
-If using Ollama (recommended for low cost):
+## If using Ollama (recommended for low cost):
+
+### Installation:
+
+**macOS:**
 ```bash
-brew install ollama  # or follow official install
-ollama pull mistral
-ollama pull nomic-embed-text
+brew install ollama  # or download from https://ollama.com/download
 ```
 
+**Linux:**
+```bash
+curl -fsSL https://ollama.com/install.sh | sh 
+```
+
+**Windows**
+```bash
+Download installer from https://ollama.com/download/windows
+```
+
+### Pull required models:
+```bash
+ollama pull mistral
+ollama pull nomic-embed-text # for embedding (vectors)
+```
+
+### Start Ollama service:
+
+***macOS/Linux:***
+```bash
+ollama serve  # runs on http://localhost:11434
+```
+***Windows:***
+- Ollama runs automatically after installation
+
+### Alternative models you can use:
+```bash
+ollama pull llama2        # Meta's Llama 2
+ollama pull codellama     # Code-focused model
+ollama pull phi           # Microsoft's small model
+ollama pull mixtral       # Larger, more capable model
+```
+
+### Check if Ollama is running:
+```bash
+curl http://localhost:11434/api/tags
+```
 ### Configuration
 Edit `llm-dev-agent/config.yaml`:
 ```yaml
@@ -59,7 +99,7 @@ index:
 
 agent:
   top_k: 8
-  output_patch_path: "generated.patch"
+  output_patch_path: "generated"
   dry_run: false
   task_source: "manual"  # manual | trello
 
@@ -81,7 +121,7 @@ Notes:
 ### Usage
 Run the agent:
 ```bash
-python3 /absolute/path/to/llm-dev-agent/main.py
+python3 main.py
 ```
 
 Flow:

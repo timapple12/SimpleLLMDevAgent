@@ -1,7 +1,12 @@
-import os
-import sys
-from pathlib import Path
+from __future__ import annotations
 
+import datetime
+
+__import__('pysqlite3')
+import sys
+sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+
+from pathlib import Path
 from modules.code_indexer import CodeIndexer
 from modules.llm_agent import LLMAgent
 from modules.patch_applier import PatchApplier
@@ -78,7 +83,7 @@ def main():
     relevant = indexer.search(task_description, top_k=top_k)
 
     # Analyze sufficiency if task came from Trello
-    if app.agent.task_source == "trello" and app.trello.enabled:
+    """if app.agent.task_source == "trello" and app.trello.enabled:
         llm_for_analysis = LLMAgent(
             provider=app.provider.provider,
             model=app.provider.model,
@@ -94,7 +99,7 @@ def main():
         if missing:
             print("Missing details:")
             for m in missing:
-                print(f"- {m}")
+                print(f"- {m}")"""
 
     # 2) Generate patch via LLM
     llm = LLMAgent(
@@ -109,11 +114,23 @@ def main():
     print("Generating git diff patch...")
     patch_text = llm.generate_git_diff(task_description, relevant)
 
-    output_patch_path = Path(app.agent.output_patch_path).resolve()
-    if not output_patch_path.is_absolute():
-        output_patch_path = agent_root / output_patch_path
+    output_patch_dir = Path(app.agent.output_patch_path).resolve()
+    if not output_patch_dir.is_absolute():
+        output_patch_dir = agent_root / output_patch_dir
+
+    output_patch_dir.mkdir(parents=True, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    #patch_filename = f"patch_{timestamp}.patch"
+
+    task_slug = task_description[:30].replace(" ", "_").replace("/", "_")
+    patch_filename = f"patch_{timestamp}_{task_slug}.patch"
+
+    output_patch_path = output_patch_dir / patch_filename
+
     with open(output_patch_path, "w", encoding="utf-8") as f:
         f.write(patch_text)
+
     print(f"Patch saved to {output_patch_path}")
 
     # 3) Ask user to apply

@@ -98,3 +98,7 @@ __MACOSX/
 test-output/
 reports/
 coverage/
+generated/
+
+vector_store/
+*.sqlite3
